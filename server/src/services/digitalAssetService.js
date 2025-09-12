@@ -1,7 +1,8 @@
-const digitalAssetStore = require('../graphicAssets/digitalAssetPersistence.js')
+const digitalAssetDocStore = require('../graphicAssets/digitalAssetDocs.js')
 const uuid = require('uuid')
 class DigitalAssetService {
-    static #assetStore = digitalAssetStore
+    static #assetDocStore = digitalAssetDocStore
+    static #assetFileStore = ""
     // Make another asset store client for file uploading to uploadthing.
     // Will contain any similar methods (e.g. 'updateAsset', 'deleteAsset') but houses
     // other logic such as building fileKey, if necessary, and related preprocessing tasks. 
@@ -16,7 +17,7 @@ class DigitalAssetService {
             // Create the unique fileKey with uuid attached and persist image data
             const fileKey = `${uuid.v4()}-${imageDetails.fileName}`
             imageDetails.fileKey = fileKey
-            return await this.#assetStore.saveImageDoc(imageDetails)
+            return await this.#assetDocStore.saveImageDoc(imageDetails)
         } catch(err) {
             if(err.name === "ValidationError"){
                 console.error(`Invalid property value for property '${ err.errors[ Object.keys(err.errors)[0] ].path }'`)
@@ -31,7 +32,7 @@ class DigitalAssetService {
             if(!userId){
                 throw new Error("User Id is required to create image")
             }
-            return await this.#assetStore.deleteImageDoc(imageId, userId)
+            return await this.#assetDocStore.deleteImageDoc(imageId, userId)
         } catch(err) {
             console.error("Failed to delete asset 'image'")
             throw err
@@ -43,7 +44,7 @@ class DigitalAssetService {
             if(!userId){
                 throw new Error("User id is required to change asset details ")
             }
-            return await this.#assetStore.updateImageDoc(imageId, imageDetails)
+            return await this.#assetDocStore.updateImageDoc(imageId, imageDetails)
         } catch(err) {
             console.log("Failed to delete asset 'image'")
             throw err
