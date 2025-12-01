@@ -58,4 +58,4 @@ class DigitalAssetDocStore {
     }
 }
 
-module.exports = DigitalAssetStore
+module.exports = DigitalAssetDocStore

@@ -52,8 +52,8 @@ class DigitalAssetService {
         }
     }
 
-    static getClientAuthParameters(token){
-        return this.#assetFileStore.generateAuthCredentials(token)
+    static getClientAuthParameters(fileDetails = {}){
+        return this.#assetFileStore.generateAuthCredentials(fileDetails)
     }
 }
 

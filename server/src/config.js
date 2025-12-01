@@ -9,6 +9,7 @@ module.exports = {
         },
     },
     assets: {
+        urlEndpoint: 'https://ik.imagekit.io/ps3ugnqyv/',
         clientOperationExpiryTime: 120, // seconds
         acceptedImageTypes: ['avif', 'jpeg', 'png', 'jpg']
     }

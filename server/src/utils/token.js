@@ -4,7 +4,11 @@ const { BlacklistedToken } = require('../auth/tokenBlacklist.js')
 const { isRelativeTimeNotation } = require('../utils/helpers.js')
 const authConfig = require('../config.js').auth
 
-// TODO: Figure out why the user password is present in the generated token
+
+function generateSignedToken(payload, secret, options){
+    return token = jwt.sign(payload, secret, options)
+}
+
 function createJWTToken(details = undefined){
     if(typeof details !== 'object') details = {};
     // Validate 'maxAge' value to ensure it's of an accepted format, either Duration Shorthand or Numerical (in seconds)
@@ -24,7 +28,7 @@ function createJWTToken(details = undefined){
     // Consolidate entries into session data obj
     details.sessionData = Object.fromEntries(sessionSafeData)
     // generate and sign token with secret and set expiry
-    const token = jwt.sign({
+    const token = generateSignedToken({
         _id: uuid.v4(),
         data: details.sessionData,
     }, process.env.JWT_SIGNITURE_SECRET, {
@@ -58,4 +62,4 @@ async function revokeJWTToken(token){
 }
 
 
-module.exports = { createJWTToken, verifyJWTToken, revokeJWTToken }
+module.exports = { createJWTToken, verifyJWTToken, revokeJWTToken, generateSignedToken }

@@ -1,18 +1,28 @@
 const ImageKit = require('@imagekit/nodejs')
-const uuid4 = require('uuid').v4
 const config = require('../config.js')
+const { generateSignedToken } = require('../utils/token.js')
 
 class DigitalAssetFileStorage {
     credentialExp = config.auth.assets.clientOperationExpiryTime
 
     constructor(){
-        this.client = new ImageKit({privateKey: process.env.IMAGEKIT_PRIVATE_KEY})
+        this.client = new ImageKit({
+            privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+            publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+            urlEndpoint: config.assets.urlEndpoint
+        })
     }
 
-    generateAuthCredentials(token = null){
-        token = token || uuid4();
+    generateAuthCredentials(fileDetails = {}){
         const exp = parseInt(Date.now()/1000) + this.credentialExp;
-        return this.client.helper.getAuthenticationParameters(token, exp)
+        return generateSignedToken(fileDetails, process.env.IMAGEKIT_PRIVATE_KEY, {
+            expiresIn: exp,
+            header: {
+                alg: "HS256",
+                typ: "JWT",
+                kid: process.env.IMAGEKIT_PUBLIC_KEY,
+            }
+        })
     }
     
     static djb2(s) {
