@@ -1,10 +1,8 @@
-const DigitalAssetFileStorage = require('../../graphicAssets/assetStorage.js')
+const DigitalAssetFileStorage = require('../../services/digitalAssetService.js')
 
 function assetAuthParamController(req, res){
     let token = req.query.token
-    const digitalAssetStorage = new DigitalAssetFileStorage()
-    const clientAuthParams = digitalAssetStorage.generateAuthCredentials(token)
-
+    const clientAuthParams = DigitalAssetFileStorage.getClientAuthParameters(token)
     res.set({"Access-Control-Allow-Origin" : "*"})
     res.status(200).json(clientAuthParams);
 }

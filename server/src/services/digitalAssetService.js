@@ -1,11 +1,12 @@
-const digitalAssetDocStore = require('../graphicAssets/digitalAssetDocs.js')
+const DigitalAssetDocStore = require('../graphicAssets/digitalAssetDocs.js')
+const DigitalAssetFileStorage = require('../graphicAssets/assetStorage.js')
 const uuid = require('uuid')
+
+
 class DigitalAssetService {
-    static #assetDocStore = digitalAssetDocStore
-    static #assetFileStore = ""
-    // Make another asset store client for file uploading to uploadthing.
-    // Will contain any similar methods (e.g. 'updateAsset', 'deleteAsset') but houses
-    // other logic such as building fileKey, if necessary, and related preprocessing tasks. 
+    static #assetDocStore = DigitalAssetDocStore
+    static #assetFileStore = new DigitalAssetFileStorage()
+
 
     static async createImage(userId, imageDetails){
         try {
@@ -49,6 +50,10 @@ class DigitalAssetService {
             console.log("Failed to delete asset 'image'")
             throw err
         }
+    }
+
+    static getClientAuthParameters(token){
+        return this.#assetFileStore.generateAuthCredentials(token)
     }
 }
 
