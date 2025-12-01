@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { AuthRouter, UserOperationsRouter, TestAuthRouter } = require('./src/routes')
+const { AuthRouter, UserOperationsRouter, TestAuthRouter, DigitalAssetRouter } = require('./src/routes')
 require('dotenv').config()
 require('./mongodb.js')
 
@@ -15,6 +15,8 @@ app.use(cors())
 app.use('/users', UserOperationsRouter)
 
 app.use('/auth', AuthRouter)
+
+app.use('/assets', DigitalAssetRouter)
 
 app.use('/test', TestAuthRouter)
 

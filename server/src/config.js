@@ -6,6 +6,10 @@ module.exports = {
         },
         assets: {
             clientOperationExpiryTime: 120, // seconds
-        }
+        },
     },
+    assets: {
+        clientOperationExpiryTime: 120, // seconds
+        acceptedImageTypes: ['avif', 'jpeg', 'png', 'jpg']
+    }
 }

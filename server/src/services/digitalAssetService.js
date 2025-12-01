@@ -8,7 +8,7 @@ class DigitalAssetService {
     static #assetFileStore = new DigitalAssetFileStorage()
 
 
-    static async createImage(userId, imageDetails){
+    static async registerImageUpload(userId, imageDetails){
         try {
             // Set the owner id to the current user as procedure requirement
             if(!userId){
@@ -40,7 +40,7 @@ class DigitalAssetService {
         }
     }
 
-    static async updateImage(userId, imageId, imageDetails){
+    static async updateImageDoc(userId, imageId, imageDetails){
         try {
             if(!userId){
                 throw new Error("User id is required to change asset details ")
