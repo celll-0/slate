@@ -16,7 +16,7 @@ class DigitalAssetService {
             }
             imageDetails.ownerId = userId
             // Create the unique fileKey with uuid attached and persist image data
-            const fileKey = `${uuid.v4()}-${imageDetails.fileName}`
+            const fileKey = `${uuid.v4()}-${imageDetails.name}`
             imageDetails.fileKey = fileKey
             return await this.#assetDocStore.saveImageDoc(imageDetails)
         } catch(err) {

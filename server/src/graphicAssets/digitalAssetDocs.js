@@ -4,8 +4,22 @@ const { Image } = require('./models/image.js')
 class DigitalAssetDocStore {
     static async saveImageDoc(imageDetails){
         try {
-            const { ownerId, fileName, fileSize, fileKey } = imageDetails
-            const image = new Image({ ownerId, fileName, fileSize, fileKey })
+            const image = new Image({ 
+                ownerId: imageDetails.ownerId,
+                ik_id: imageDetails.fileId,
+                name: imageDetails.name,
+                fileSize: imageDetails.fileSize,
+                fileKey: imageDetails.fileKey,
+                filePath: imageDetails.filePath,
+                fileType: imageDetails.fileExtension,
+                url: imageDetails.url,
+                dimensions: {
+                    height: imageDetails.height,
+                    width: imageDetails.width
+                },
+                orientation: imageDetails.orientation,
+                thumbnailUrl: imageDetails.thumbnailUrl,
+            })
             return await image.save()
         } catch(err) {
             const msg = this.#resolveAssetOperationErrorMessage(err)
