@@ -1,5 +1,4 @@
 const DigitalAssetService = require('../../../services/digitalAssetService.js')
-const digitalAssetService = require('../../../services/digitalAssetService.js')
 const config = require('../../../config.js')
 
 

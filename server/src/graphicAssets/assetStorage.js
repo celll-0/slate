@@ -1,6 +1,8 @@
 const ImageKit = require('@imagekit/nodejs')
 const config = require('../config.js')
 const { generateSignedToken } = require('../utils/token.js')
+const { encodeURLString } = require('../utils/helpers.js')
+const crypto = require('node:crypto');
 
 class DigitalAssetFileStorage {
     credentialExp = config.auth.assets.clientOperationExpiryTime
@@ -23,6 +25,20 @@ class DigitalAssetFileStorage {
                 kid: process.env.IMAGEKIT_PUBLIC_KEY,
             }
         })
+    }
+
+    appendSignature(url){
+        let assetUrl = new URL(encodeURLString(url));
+        const expiryTimestamp = parseInt(new Date().getTime() / 1000, 10) + 300;
+        let str = url.replace(config.assets.urlEndpoint, "") + expiryTimestamp
+        // Calcualte the signature using your priviate key 
+        const signature = crypto.createHmac('sha1', process.env.IMAGEKIT_PRIVATE_KEY).update(str).digest('hex');
+        // Return the url with appended params
+        let urlParams = new URLSearchParams()
+            urlParams.append("ik-t", expiryTimestamp)
+            urlParams.append("ik-s", signature);
+        assetUrl.search = urlParams.toString();
+        return assetUrl
     }
     
     static djb2(s) {

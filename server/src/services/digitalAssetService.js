@@ -1,6 +1,7 @@
 const DigitalAssetDocStore = require('../graphicAssets/digitalAssetDocs.js')
 const DigitalAssetFileStorage = require('../graphicAssets/assetStorage.js')
 const uuid = require('uuid')
+const config = require('../config.js')
 
 
 class DigitalAssetService {
@@ -48,6 +49,34 @@ class DigitalAssetService {
             return await this.#assetDocStore.updateImageDoc(imageId, imageDetails)
         } catch(err) {
             console.log("Failed to delete asset 'image'")
+            throw err
+        }
+    }
+
+    static async getSignedImageUrl(imageId){
+        try {
+            const imageDoc = await this.#assetDocStore.getImageDocById(imageId)
+            if(!imageDoc){
+                throw new Error("Image not found. Invalid image id")
+            }
+
+            if(!imageDoc.url){
+                try {
+                    let filePath = imageDoc.filePath.startsWith('/') ? imageDoc.filePath.slice(1) : imageDoc.filePath
+                    imageDoc.url = config.assets.urlEndpoint + filePath
+                } catch(err){
+                    if(imageDoc.ik_id){
+                        imageDoc.url = `${config.assets.urlEndpoint}/${imageDoc.ik_id}`
+                        console.warn("Resolved missing image URL using imageKit id")
+                        return this.#assetFileStore.appendSignature(imageDoc.url).toString()
+                    }
+                    console.error("Could not resolve missing image URL")
+                    throw new Error("Image URL is missing and could not be resolved")
+                }
+            }
+            return this.#assetFileStore.appendSignature(imageDoc.url).toString()
+        } catch(err) {
+            console.error("Failed to get image URL")
             throw err
         }
     }

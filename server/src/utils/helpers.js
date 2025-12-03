@@ -7,4 +7,12 @@ function isRelativeTimeNotation(string){
     return timeNotationFormat.test(string)
 }
 
-module.exports = { isRelativeTimeNotation }
+function encodeURLString(url){
+    if(typeof url === 'string'){ 
+        // Encode only the specific characters that may cause issues in URL parsing
+        url = url.replaceAll(/\/tr:/g, '/tr%3A')
+    }
+    return url;
+}
+
+module.exports = { isRelativeTimeNotation, encodeURLString }

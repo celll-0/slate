@@ -1,5 +1,6 @@
 const { verifyJWTToken } = require('../utils/token.js')
 const { BlacklistedToken } = require('../auth/tokenBlacklist.js')
+const { User } = require('../users/model.js')
 
 
 function authenticationRequired(req, res, next){
@@ -23,4 +24,9 @@ function authenticationRequired(req, res, next){
         })
 }
 
-module.exports = { authenticationRequired }
+function fingerprinted(req, res, next){
+    res.ua = req.get('User-Agent');
+    next()
+}
+
+module.exports = { authenticationRequired, fingerprinted }
