@@ -15,9 +15,9 @@ class DigitalAssetFileStorage {
         })
     }
 
-    generateAuthCredentials(fileDetails = {}){
+    generateAuthCredentials(payload = {}){
         const exp = parseInt(Date.now()/1000) + this.credentialExp;
-        return generateSignedToken(fileDetails, process.env.IMAGEKIT_PRIVATE_KEY, {
+        return generateSignedToken(payload, process.env.IMAGEKIT_PRIVATE_KEY, {
             expiresIn: exp,
             header: {
                 alg: "HS256",

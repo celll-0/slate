@@ -6,8 +6,7 @@ const { createJWTToken } = require('../../utils/token.js')
 
 async function registerNewUserController(req, res){
     try {
-        const newUserDetails = req.body.userDetails
-        const { username, email, password, dob } = newUserDetails
+        const { username, email, password, dob } = req.body.userDetails
         // Check if a user exists with the same username or email, and notift if so.
         const exists = await UserValidation.exists({email, username})
         if(exists.length > 0){
