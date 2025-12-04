@@ -1,10 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const { AuthRouter, UserOperationsRouter, TestAuthRouter, DigitalAssetRouter } = require('./src/routes')
-require('dotenv').config()
 require('./mongodb.js')
 
-
+console.log("Starting server blehhhhhhhhhhhh...")
 const PORT = 8000
 const app = express()
 

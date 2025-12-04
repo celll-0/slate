@@ -3,8 +3,8 @@ const config = require('../../../config.js')
 
 async function imageAssetUrlController(req, res){
     try {
-        const { ImageId } = req.query
-        const imageUrl = await digitalAssetService.getSignedImageUrl(ImageId)
+        const { id } = req.query
+        const imageUrl = await digitalAssetService.getSignedImageUrl(id)
         if(!imageUrl){
             return res.status(404).json({message: 'Image not found. Invalid image id', })
         }
