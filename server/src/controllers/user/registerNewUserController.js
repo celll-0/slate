@@ -1,22 +1,17 @@
-const { User } = require('../../users/model.js')
-const { UserValidation } = require('../../utils/validation.js')
+const UserService = require('../../services/userService.js')
 const crypto = require('crypto')
 const { createJWTToken } = require('../../utils/token.js')
 
-
+    
 async function registerNewUserController(req, res){
     try {
         const { username, email, password, dob } = req.body.userDetails
         // Check if a user exists with the same username or email, and notift if so.
-        const exists = await UserValidation.exists({email, username})
+        const exists = await UserService.validator.exists({email, username})
         if(exists.length > 0){
             return res.status(409).json({message: "User already exists"})
         }
-        // Generate password hash with 'sha256' protocol and persist new user
-        const passwordHash = crypto.hash('sha256', password)
-        const newUser = new User({username, email, dob, password: passwordHash})
-        await newUser.save()
-            .catch((err) => {throw err})
+        const newUser = await UserService.createNewUser({username, email, dob, password})
         // Send new user details to client (temp implementation, likely to change to necessary detail for login and such)
         res.status(200).json({
             message: "New user successfully registered",

@@ -1,13 +1,13 @@
-const { User } = require('../../users/model.js')
+const UserService = require('../../services/userService.js')
 
 async function getUsersController(req, res){
     const userId = req.params ? req.params.id : undefined;
     try {
         if(!userId || userId === 0){
             // TODO: consider verifying the request origin originates from host domain or authorized clients
-            return res.status(200).json(await User.find())  //TODO: add filter to exclude 'password' from query result
+            return res.status(200).json(await UserService.getAllUsers())  //TODO: add filter to exclude 'password' from query result
         } else {
-            var user = await User.findById(userId)  //TODO: add filter to exclude 'password' from query result
+            var user = await UserService.getUserById(userId)  //TODO: add filter to exclude 'password' from query result
             if(!user){
                 return res.status(404).json({message: "Unable to find the user"})
             }

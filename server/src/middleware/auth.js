@@ -1,6 +1,5 @@
 const { verifyJWTToken } = require('../utils/token.js')
 const { BlacklistedToken } = require('../auth/tokenBlacklist.js')
-const { User } = require('../users/model.js')
 
 
 function authenticationRequired(req, res, next){

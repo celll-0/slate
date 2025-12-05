@@ -1,5 +1,5 @@
 const { revokeJWTToken } = require('../../utils/token.js')
-const { UserValidation } = require('../../utils/validation.js')
+const UserService = require('../../services/userService.js')
 
 async function logoutController(req, res){
     try {
@@ -7,7 +7,7 @@ async function logoutController(req, res){
         let token = req.headers.authorization || req.body.token
         token = token.startsWith('Bearer') ? token.slice(6).trimStart() : token ;
         // Only logout if user exist to prevent erraneous token revocation
-        const exists = await UserValidation.exists_byId(userId)
+        const exists = await UserService.validator.exists_byId(userId)
         if(exists <= 0){
             return res.status(404).json({message: "Cannot logout non-existent user"})
         }

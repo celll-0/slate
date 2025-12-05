@@ -1,4 +1,4 @@
-const { UserValidation } = require('../../utils/validation.js')
+const UserService = require('../../services/userService.js')
 const { createJWTToken } = require('../../utils/token.js')
 const authConfig = require('../../config.js').auth
 
@@ -17,13 +17,13 @@ async function loginController(req, res){
         
         if(!password) return res.status(400).json({message: "Password is required for login"});
         // Check that the user account exists in the system
-        const exists = await UserValidation.exists({ userRef: userReference })
+        const exists = await UserService.validator.exists({ userRef: userReference })
         if(exists <= 0){
             return res.status(404).json({message: "Unable to find the user"})
         }
         const user = exists[0]
         // Validate given password and return the generated jwt token with successful response
-        if(UserValidation.iscorrectPassword(password, user)){            
+        if(UserService.validator.iscorrectPassword(password, user)){            
             return res.status(200).json({
                 message: `User successfully logged in`,
                 token: createJWTToken({
